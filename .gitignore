@@ -1,0 +1,12 @@
+/**/target/
+
+/**/.settings
+
+/**/.classpath
+
+/**/.project
+
+/**/*log*/
+/src/main/java/com/jpq/springboot/biz/
+/src/test
+/target/
