@@ -32,8 +32,13 @@ public class MpGeneratorUtil {
         String dbPwd = "123456";
         String outputDir = "E:\\opt\\code";
         generateCode(driverType, dbUrl, dbUser, dbPwd, outputDir);
+        
     }
 
+    public static void generateCode(DatabaseInfo info) {
+        generateCode(info.getDbDriver(), info.getDbUrl(), info.getDbUser(), info.getDbPwd(), info.getOutputDir());
+    }
+    
     public static void generateCode(String driverType, String dbUrl, String dbUser, String dbPwd, String outputDir) {
         DataSourceConfig dataSourceConfig = new DataSourceConfig();
         dataSourceConfig.setUrl(dbUrl);
@@ -55,14 +60,15 @@ public class MpGeneratorUtil {
         globalConfig.setBaseColumnList(true);// 生成xml列名
         globalConfig.setIdType(IdType.ID_WORKER);
         globalConfig.setEntityName("%sDO");// 文件名、类名都以DO结尾
+        globalConfig.setActiveRecord(true);// 简单来说就是DO extends Model<>
 
         // 策略配置，设置entity.java.vm的值
         StrategyConfig strategyConfig = new StrategyConfig();
+        strategyConfig.setRestControllerStyle(true);
         strategyConfig.setEntityLombokModel(true);
         // 类文件命名
         strategyConfig.setNaming(NamingStrategy.underline_to_camel);
 //        strategyConfig.setColumnNaming(NamingStrategy.underline_to_camel);// 去掉好像无影响
-        strategyConfig.setRestControllerStyle(true);
         // 表名，不写则默认生成所有的表
 //        strategyConfig.setInclude("t_order");
         // 是否生成字段常量（默认 false），public static final String BUSINESS_KEY_ = "BUSINESS_KEY_";
@@ -71,12 +77,18 @@ public class MpGeneratorUtil {
 //        strategyConfig.setExclude(new String[]{"test"}) // 排除生成的表，支持正则表达式
         // 【实体】是否为构建者模型（默认 false），public User setName(String name) {this.name = name; return this;}
 //        strategyConfig.setEntityBuilderModel(true);
-     // Boolean类型字段是否移除is前缀处理，mysql没有改类型，暂无法测试
+     // Boolean类型字段是否移除is前缀处理，mysql没有该类型，暂无法测试
 //        strategyConfig.setEntityBooleanColumnRemoveIsPrefix(true);
         
         PackageConfig packageConfig = new PackageConfig();
-        packageConfig.setParent("com.jpq.mpg");// 父包名
+        packageConfig.setParent("com.jpq");// 父包名
         packageConfig.setXml("xml");// 修改xml包，文件路径也会修改
+//        packageConfig.setController("");
+//        packageConfig.setService("");
+//        packageConfig.setServiceImpl("");
+//        packageConfig.setMapper("");
+//        packageConfig.setEntity("");
+//        packageConfig.setModuleName("");
         
         // 指定自定义模板路径, 位置：/resources/templates/entity.java.ftl(或者是.vm)
         // 注意不要带上.ftl(或者是.vm), 会根据使用的模板引擎自动识别
