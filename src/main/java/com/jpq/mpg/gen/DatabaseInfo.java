@@ -16,6 +16,7 @@ public class DatabaseInfo {
     private String author;
     private String version;
     private String tableNames;
+    private String optsLockVersion;
     private String entityPackage;
     private String outputPath;
     

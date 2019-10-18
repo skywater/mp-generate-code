@@ -62,6 +62,9 @@ public class CodeWindow extends JFrame implements ActionListener {
     CommonLabel jlTableNames = new CommonLabel("TABLE_NAMES");
     JTextField jtTableNames = new JTextField(20);
 
+    CommonLabel jlOptsLockVersion = new CommonLabel("OPTS_LOCK_VERSION");
+    JTextField jtOptsLockVersion = new JTextField(20);
+
     CommonLabel jlPriKey = new CommonLabel("PRI_KEY");
     JComboBox<String> jcbPrikey = new JComboBox<>(new String[]{"AUTO", "UUID", "ID_WORKER", "ID_WORKER_STR", "NONE"});
 
@@ -99,6 +102,7 @@ public class CodeWindow extends JFrame implements ActionListener {
         btGroup.add(jrBtnGenFile);
         btGroup.add(jrBtnGenZip);
         CommonPanel jcbPanel = new CommonPanel().setCommonLayout(new GridLayout(0, 5));
+        jcbPanel.setPreferredSize(new Dimension(60, 46));
         jcbPanel.addAll(var21, var23, var24, var25, var26);
         contentPanel.add(jcbPanel, BorderLayout.CENTER);
 
@@ -115,7 +119,7 @@ public class CodeWindow extends JFrame implements ActionListener {
         contentPanel.add(jbtPanel, BorderLayout.SOUTH);
 
 //      this.setSize(new Dimension(60, 10));// 失效
-        this.setPreferredSize(new Dimension(600, 460));
+        this.setPreferredSize(new Dimension(600, 480));
         this.setContentPane(contentPanel);
         this.setTitle("代码生成器");
         this.setVisible(true);

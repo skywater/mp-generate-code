@@ -2,8 +2,10 @@ package com.jpq.mpg.gen;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -31,15 +33,15 @@ public class MpGeneratorUtil {
         String dbUser = "root";
         String dbPwd = "123456";
         String outputDir = "E:\\opt\\code";
-        generateCode(driverType, dbUrl, dbUser, dbPwd, outputDir);
+        generateCode(driverType, dbUrl, dbUser, dbPwd, outputDir, null);
         
     }
 
     public static void generateCode(DatabaseInfo info) {
-        generateCode(info.getDbDriver(), info.getDbUrl(), info.getDbUser(), info.getDbPwd(), info.getOutputDir());
+        generateCode(info.getDbDriver(), info.getDbUrl(), info.getDbUser(), info.getDbPwd(), info.getOutputDir(), info.getOptsLockVersion(), info.getTableNames().split(","));
     }
     
-    public static void generateCode(String driverType, String dbUrl, String dbUser, String dbPwd, String outputDir) {
+    public static void generateCode(String driverType, String dbUrl, String dbUser, String dbPwd, String outputDir,String optsLockVersion, String... tableNames) {
         DataSourceConfig dataSourceConfig = new DataSourceConfig();
         dataSourceConfig.setUrl(dbUrl);
         dataSourceConfig.setDriverName(driverType);
@@ -66,11 +68,23 @@ public class MpGeneratorUtil {
         StrategyConfig strategyConfig = new StrategyConfig();
         strategyConfig.setRestControllerStyle(true);
         strategyConfig.setEntityLombokModel(true);
+        strategyConfig.setVersionFieldName(optsLockVersion);
+//        strategyConfig.setLogicDeleteFieldName("enable");// @TableLogic
+        strategyConfig.setEntityTableFieldAnnotationEnable(true);// @TableField
         // 类文件命名
         strategyConfig.setNaming(NamingStrategy.underline_to_camel);
 //        strategyConfig.setColumnNaming(NamingStrategy.underline_to_camel);// 去掉好像无影响
         // 表名，不写则默认生成所有的表
-//        strategyConfig.setInclude("t_order");
+        if(null != tableNames && tableNames.length > 0) {
+        	Arrays.stream(tableNames).forEach(elem -> {
+        		elem = elem.trim();
+        		if(StringUtils.isNotBlank(elem)) {
+                    strategyConfig.setInclude(elem);
+        		}
+        	});
+            strategyConfig.setInclude(Arrays.stream(tableNames).filter(e -> StringUtils.isNotBlank(e))
+            		.map(e -> e.trim()).collect(Collectors.toList()).toArray(new String[] {}));
+        }
         // 是否生成字段常量（默认 false），public static final String BUSINESS_KEY_ = "BUSINESS_KEY_";
 //        strategyConfig.setEntityColumnConstant(true);
 //        strategyConfig.setInclude(tablesArray) // 需要生成的表，支持正则表达式

@@ -54,13 +54,14 @@ public class CodeListener implements ActionListener {
         try {
             DatabaseInfo info = new DatabaseInfo();
             info.setTableNames(codeWindow.jtTableNames.getText());
+            info.setOptsLockVersion(codeWindow.jtOptsLockVersion.getText());
             info.setPrimaryKeyPolicy(codeWindow.jtParentPkg.getText().toLowerCase());
             info.setOutputPath(codeWindow.jtOutputPath.getText());
             info.setDbUrl(codeWindow.jtDbUrl.getText());
             info.setDbUser(codeWindow.jtDbAccount.getText());
             info.setDbPwd(codeWindow.jtDbPwd.getText());
             info.setAuthor(codeWindow.jtAuthor.getText());
-            info.setAuthor(codeWindow.jtVersion.getText());
+            info.setVersion(codeWindow.jtVersion.getText());
             info.setDbDriver(codeWindow.jtDbDriver.getSelectedItem().toString());
             info.setFtlDescription(codeWindow.jtDesc.getText());
             MpGeneratorUtil.generateCode(info);
